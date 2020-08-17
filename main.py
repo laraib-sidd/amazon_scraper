@@ -15,7 +15,7 @@ if __name__ == "__main__":
                 product['url'] = f'https://www.amazon.com{product["url"]}'
                 json.dump(product['url'], outfile)
                 outfile.write("\n")
-                # sleep(5)
+                sleep(5)
 
     # Product Scraper
     with open("urls.txt", 'r') as urllist, open('output.json', 'w') as outfile:
@@ -27,4 +27,4 @@ if __name__ == "__main__":
             if data:
                 json.dump(data, outfile)
                 outfile.write("\n")
-                # sleep(5)
+                sleep(5)
