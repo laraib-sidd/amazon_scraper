@@ -5,7 +5,7 @@ from time import sleep
 
 if __name__ == "__main__":
     # Query search
-    query = input("What's the keword you want to search for:")
+    query = input("What's the keyword you want to search for:")
     url = f'https://www.amazon.in/s?k={query}&ref=nb_sb_noss'
     with open('urls.txt', 'w') as outfile:
         data = query_search.scrape(url)
