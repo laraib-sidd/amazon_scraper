@@ -38,14 +38,3 @@ def scrape(url):
     # Pass the HTML of the page and create
     return e.extract(r.text)
 
-product_data = []
-with open("urls.txt",'r') as urllist, open('output.json','w') as outfile:
-    for url in urllist.readlines():
-        url = url.replace('"','')
-        data = scrape(url)
-        if data['name'] == null:
-            continue
-        if data:
-            json.dump(data,outfile)
-            outfile.write("\n")
-            # sleep(5)

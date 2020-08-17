@@ -35,15 +35,3 @@ def scrape(url):
     # Pass the HTML of the page and create 
     return e.extract(r.text)
 
-# product_data = []
-query = input("What's the keword you want to search for:")
-url = f'https://www.amazon.in/s?k={query}&ref=nb_sb_noss'
-with open('urls.txt','w') as outfile:
-        data = scrape(url) 
-        if data:
-            for product in data['products']:
-                product['search_url'] = url
-                product['url'] = f'https://www.amazon.com{product["url"]}'
-                json.dump(product['url'],outfile)
-                outfile.write("\n")
-                sleep(5)
