@@ -1,5 +1,7 @@
 from product_scraper import scraper
 from query_search import query_search
+import json 
+from time import sleep
 
 if __name__ == "__main__":
     # Query search
@@ -13,14 +15,14 @@ if __name__ == "__main__":
                 product['url'] = f'https://www.amazon.com{product["url"]}'
                 json.dump(product['url'], outfile)
                 outfile.write("\n")
-                sleep(5)
+                # sleep(5)
 
     # Product Scraper
     with open("urls.txt", 'r') as urllist, open('output.json', 'w') as outfile:
         for url in urllist.readlines():
             url = url.replace('"', '')
-            data = scrape(url)
-            if data['name'] == null:
+            data = scraper.scrape(url)
+            if data['name'] is None :
                 continue
             if data:
                 json.dump(data, outfile)
