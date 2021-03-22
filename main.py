@@ -2,29 +2,53 @@ from product_scraper import scraper
 from query_search import query_search
 import json
 from time import sleep
+import pandas as pd
 
 if __name__ == "__main__":
     # Query search
+    urls, product_url, names, prices, images, ratings, reviews, asins = (
+        [] for i in range(8))
     query = input("What's the keyword you want to search for:")
     url = f'https://www.amazon.com/s?k={query}&ref=nb_sb_noss'
-    with open('urls.txt', 'w') as outfile:
-        data = query_search.scrape(url)
-        if data:
-            for product in data['products'][:10]:
-                product['search_url'] = url
-                product['url'] = f'https://www.amazon.com{product["url"]}'
-                json.dump(product['url'], outfile)
-                outfile.write("\n")
-                sleep(5)
+    data = query_search.scrape(url)
+    if data:
+        for product in data['products'][2:12]:
+            product['search_url'] = url
+            product['url'] = f'https://www.amazon.com{product["url"]}'
+            urls.append(product['url'])
+            sleep(5)
 
     # Product Scraper
-    with open("urls.txt", 'r') as urllist, open('output.json', 'w') as outfile:
-        for url in urllist.readlines():
-            url = url.replace('"', '')
-            data = scraper.scrape(url)
-            if data['name'] is None:
-                continue
-            if data:
-                json.dump(data, outfile)
-                outfile.write(",\n")
-                sleep(5)
+    for url in urls:
+        url = url.replace('"', '')
+        data = scraper.scrape(url)
+        if data['name'] is None:
+            continue
+        if data:
+            names.append(data['name'])
+            product_url.append(url)
+            asins.append(data['asin'])
+            if data['price']:
+                prices.append(data['price'])
+            else:
+                prices.append("Not Avaialbe")
+
+            if data['images']:
+                images.append(data['images'])
+            else:
+                images.append("Not Available")
+
+            if data['rating']:
+                ratings.append(data['rating'][:3])
+            else:
+                ratings.append("Not Available")
+
+            if data['reviews']:
+                reviews.append(data['reviews'])
+            else:
+                reviews.append("Not Available")
+
+            sleep(5)
+    df = pd.DataFrame({"name": names, "product_url": product_url, "price": prices, "images": images,
+                      "rating": ratings, "reviews": reviews, "asin": asins})
+    df.to_csv('result.csv')
