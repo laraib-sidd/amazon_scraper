@@ -1,6 +1,7 @@
 from product_scraper import scraper
 from query_search import query_search
 import json
+import re
 from time import sleep
 import pandas as pd
 
@@ -44,7 +45,9 @@ if __name__ == "__main__":
                 ratings.append("Not Available")
 
             if data['reviews']:
-                reviews.append(data['reviews'])
+                review = data['reviews']
+                match = re.split(' ', review)
+                reviews.append(match[0])
             else:
                 reviews.append("Not Available")
 
