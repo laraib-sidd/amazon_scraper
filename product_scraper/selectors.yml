@@ -1,6 +1,10 @@
 name:
     css: "#productTitle"
     type: Text
+asin:
+    css: "div > div[data-asin]"
+    type: Attribute
+    attribute: data-asin
 price:
     css: "#price_inside_buybox"
     type: Text
@@ -12,29 +16,13 @@ images:
     type: Attribute
     attribute: data-a-dynamic-image
 rating:
-    css: span.arp-rating-out-of-text
+    css: "div[id='averageCustomerReviews_feature_div'] span[class='a-icon-alt']"
     type: Text
-number_of_reviews:
-    css: "a.a-link-normal h2"
+number of reviews:
+    css: "#acrCustomerReviewText"
     type: Text
-variants:
-    css: "form.a-section li"
-    multiple: true
-    type: Text
-    children:
-        name:
-            css: ""
-            type: Attribute
-            attribute: title
-        asin:
-            css: ""
-            type: Attribute
-            attribute: data-defaultasin
 product_description:
     css: "#productDescription"
-    type: Text
-sales_rank:
-    css: "li#SalesRank"
     type: Text
 link_to_all_reviews:
     css: "div.card-padding a.a-link-emphasis"

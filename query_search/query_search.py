@@ -1,15 +1,18 @@
 from selectorlib import Extractor
-import requests 
+import requests
+from fake_useragent import UserAgent
+
 
 # Create an Extractor by reading from the YAML file
 e = Extractor.from_yaml_file('query_search/selectors.yml')
 
-def scrape(url):  
 
+def scrape(url):
+    ua = UserAgent()
     headers = {
         'dnt': '1',
         'upgrade-insecure-requests': '1',
-        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36',
+        'user-agent': ua.random,
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
         'sec-fetch-site': 'same-origin',
         'sec-fetch-mode': 'navigate',
@@ -20,15 +23,17 @@ def scrape(url):
     }
 
     # Download the page using requests
-    print("Downloading %s"%url)
-    r = requests.get(url, headers=headers)
+    print(f"Downloading {url}")
+    sess = requests.session()
+    r = sess.get(url, headers=headers, timeout=20)
     # Simple check to check if page was blocked (Usually 503)
-    if r.status_code > 500:
-        if "To discuss automated access to Amazon data please contact" in r.text:
-            print("Page %s was blocked by Amazon. Please try using better proxies\n"%url)
+    if (r.status_code > 500):
+        if ("To discuss automated access to Amazon data please contact") in r.text:
+            print(
+                f"Page {url} was blocked by Amazon. Please try using better proxies\n")
         else:
-            print("Page %s must have been blocked by Amazon as the status code was %d"%(url,r.status_code))
+            print(
+                f"Page {url} must have been blocked by Amazon as the status code was {r.status_code}")
         return None
-    # Pass the HTML of the page and create 
+    # Pass the HTML of the page and create
     return e.extract(r.text)
-

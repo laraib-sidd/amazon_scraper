@@ -1,16 +1,16 @@
 from product_scraper import scraper
 from query_search import query_search
-import json 
+import json
 from time import sleep
 
 if __name__ == "__main__":
     # Query search
     query = input("What's the keyword you want to search for:")
-    url = f'https://www.amazon.in/s?k={query}&ref=nb_sb_noss'
+    url = f'https://www.amazon.com/s?k={query}&ref=nb_sb_noss'
     with open('urls.txt', 'w') as outfile:
         data = query_search.scrape(url)
         if data:
-            for product in data['products']:
+            for product in data['products'][:10]:
                 product['search_url'] = url
                 product['url'] = f'https://www.amazon.com{product["url"]}'
                 json.dump(product['url'], outfile)
@@ -22,9 +22,9 @@ if __name__ == "__main__":
         for url in urllist.readlines():
             url = url.replace('"', '')
             data = scraper.scrape(url)
-            if data['name'] is None :
+            if data['name'] is None:
                 continue
             if data:
                 json.dump(data, outfile)
-                outfile.write("\n")
+                outfile.write(",\n")
                 sleep(5)
